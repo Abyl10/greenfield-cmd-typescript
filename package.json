@@ -7,13 +7,16 @@
     "gnfd-cmd": "dist/cli.js"
   },
   "scripts": {
-    "build": "npx tsc",
+    "build": "npx tsc src/cli.ts --outDir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "commander": "^10.0.1"
+    "@bnb-chain/greenfield-chain-sdk": "^0.2.0",
+    "@bnb-chain/greenfield-cosmos-types": "^0.4.0",
+    "commander": "^10.0.1",
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",
