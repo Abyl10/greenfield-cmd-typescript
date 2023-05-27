@@ -13,8 +13,8 @@ export const createBucket = async (
     bucketName: name,
     visibility:
       (visibility?.toLowerCase() as string) === "private"
-        ? "VISIBILITY_TYPE_PRIVATE"
-        : "VISIBILITY_TYPE_PUBLIC_READ",
+        ? "VISIBILITY_TYPE_PUBLIC_READ"
+        : "VISIBILITY_TYPE_PRIVATE",
     chargedReadQuota: chargedQuota ? chargedQuota : "0",
     spInfo: selectedSp,
   } as IGetCreateBucketApproval);
