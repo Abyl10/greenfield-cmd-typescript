@@ -10,29 +10,33 @@ export const createBucket = async (
 ) => {
   const selectedSp = await selectSpForBucket();
   const bucket = await client.bucket.createBucket({
+    creator: process.env.ADDRESS || "",
     bucketName: name,
     visibility:
-      (visibility?.toLowerCase() as string) === "private"
+      visibility?.toLowerCase() === "public"
         ? "VISIBILITY_TYPE_PUBLIC_READ"
         : "VISIBILITY_TYPE_PRIVATE",
     chargedReadQuota: chargedQuota ? chargedQuota : "0",
     spInfo: selectedSp,
-  } as IGetCreateBucketApproval);
-
-  const simulateInfo = await bucket.simulate({
-    denom: "BNB",
   });
 
-  const res = await bucket.broadcast({
-    denom: "BNB",
-    gasLimit: Number(simulateInfo?.gasLimit),
-    gasPrice: simulateInfo?.gasPrice || "5000000000",
-    payer: process.env.ADDRESS || "0x8429685A919d57c08F04f1a172A0f121D95D5fe1",
-    granter: "",
-    privateKey: `0x${process.env.PRIVATE_KEY}`,
-  });
+  
 
-  if (res.code === 0) {
-    console.log("create bucket success");
-  }
+  console.log(bucket);
+  //   const simulateInfo = await bucket.simulate({
+  //     denom: "BNB",
+  //   });
+
+  //   const res = await bucket.broadcast({
+  //     denom: "BNB",
+  //     gasLimit: Number(simulateInfo?.gasLimit),
+  //     gasPrice: simulateInfo?.gasPrice || "5000000000",
+  //     payer: process.env.ADDRESS || "0x8429685A919d57c08F04f1a172A0f121D95D5fe1",
+  //     granter: "",
+  //     privateKey: `0x${process.env.PRIVATE_KEY}`,
+  //   });
+
+  //   if (res.code === 0) {
+  //     console.log("create bucket success");
+  //   }
 };
