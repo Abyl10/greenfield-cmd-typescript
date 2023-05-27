@@ -9,9 +9,10 @@ export const createBucket = async (
   chargedQuota: string | undefined
 ) => {
   const selectedSp = await selectSpForBucket();
+  console.log(name, visibility, chargedQuota, selectedSp);
   const bucket = await client.bucket.createBucket({
-    creator: process.env.ADDRESS || "",
     bucketName: name,
+    creator: process.env.ADDRESS || "",
     visibility:
       visibility?.toLowerCase() === "public"
         ? "VISIBILITY_TYPE_PUBLIC_READ"
@@ -19,8 +20,6 @@ export const createBucket = async (
     chargedReadQuota: chargedQuota ? chargedQuota : "0",
     spInfo: selectedSp,
   });
-
-  
 
   console.log(bucket);
   //   const simulateInfo = await bucket.simulate({

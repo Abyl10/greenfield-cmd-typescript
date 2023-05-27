@@ -5,6 +5,10 @@ import { Command } from "commander";
 import { getBalance, transferBalance } from "./bank/bank";
 import { getSpInfo, getSpList, getSpPrice } from "./sp/sp";
 import { createBucket } from "./bucket/createBucket";
+import { deleteBucket } from "./bucket/deleteBucket";
+import { getHeadBucket } from "./bucket/headBucket";
+import { getListBucket } from "./bucket/getListBucket";
+import { getListObjects } from "./object/listObjects";
 
 const program = new Command();
 
@@ -77,6 +81,7 @@ program
       .action((options) => {
         console.log(`Delete command called: Name: ${options.name}`);
         // Add your code here
+        deleteBucket(options.name);
       })
   )
 
@@ -90,6 +95,7 @@ program
       .action((options) => {
         console.log(`Head command called: Name: ${options.name}`);
         // Add your code here
+        getHeadBucket(options.name);
       })
   )
 
@@ -100,6 +106,7 @@ program
       .action(() => {
         console.log("List command called");
         // Add your code here
+        getListBucket();
       })
   );
 
@@ -108,10 +115,15 @@ program
   .description(
     "Support the object operation functions, including put/get/update/delete/head/list and so on"
   )
-  .action(() => {
-    console.log("Object command called");
-    // Add your code here
-  });
+  .addCommand(
+    new Command("ls")
+      .description("list of objects in the bucket")
+      .requiredOption("--name <name>", "Bucket name")
+      .action((options) => {
+        console.log(`List command called: Name: ${options.name}`);
+        getListObjects(options.name);
+      })
+  );
 
 program
   .command("group")
