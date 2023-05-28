@@ -16,7 +16,8 @@
     "@bnb-chain/greenfield-chain-sdk": "^0.2.0",
     "@bnb-chain/greenfield-cosmos-types": "^0.4.0",
     "commander": "^10.0.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "@types/node": "^20.2.5",

@@ -13,15 +13,26 @@ export const transferBalance = async (toAddress: string, amount: string) => {
       },
     ],
   };
-  console.log(process.env.ADDRESS);
   const transferTx = await client.account.transfer(msgSend);
 
   const simulateInfo = await transferTx.simulate({
     denom: "BNB",
   });
 
-  console.log(transferTx);
-  console.log(simulateInfo);
+  const res = await transferTx.broadcast({
+    gasLimit: Number(simulateInfo?.gasLimit),
+    gasPrice: simulateInfo?.gasPrice || "5000000000",
+    payer: process.env.ADDRESS || "",
+    granter: "",
+    privateKey: `0x${process.env.PRIVATE_KEY}`,
+    denom: "BNB",
+  });
+
+  if (res.code === 0) {
+    console.log("transfer success");
+    return;
+  }
+  console.log("transfer failed");
 };
 
 export const getBalance = async (address: string) => {

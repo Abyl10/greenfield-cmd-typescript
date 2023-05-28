@@ -21,21 +21,20 @@ export const createBucket = async (
     spInfo: selectedSp,
   });
 
-  console.log(bucket);
-  //   const simulateInfo = await bucket.simulate({
-  //     denom: "BNB",
-  //   });
+  const simulateInfo = await bucket.simulate({
+    denom: "BNB",
+  });
 
-  //   const res = await bucket.broadcast({
-  //     denom: "BNB",
-  //     gasLimit: Number(simulateInfo?.gasLimit),
-  //     gasPrice: simulateInfo?.gasPrice || "5000000000",
-  //     payer: process.env.ADDRESS || "0x8429685A919d57c08F04f1a172A0f121D95D5fe1",
-  //     granter: "",
-  //     privateKey: `0x${process.env.PRIVATE_KEY}`,
-  //   });
+  const res = await bucket.broadcast({
+    denom: "BNB",
+    gasLimit: Number(simulateInfo?.gasLimit),
+    gasPrice: simulateInfo?.gasPrice || "5000000000",
+    payer: process.env.ADDRESS || "",
+    granter: "",
+    privateKey: `0x${process.env.PRIVATE_KEY}`,
+  });
 
-  //   if (res.code === 0) {
-  //     console.log("create bucket success");
-  //   }
+  if (res.code === 0) {
+    console.log("create bucket success");
+  }
 };

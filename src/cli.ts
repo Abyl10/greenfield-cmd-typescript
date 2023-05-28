@@ -4,11 +4,15 @@ require("dotenv").config();
 import { Command } from "commander";
 import { getBalance, transferBalance } from "./bank/bank";
 import { getSpInfo, getSpList, getSpPrice } from "./sp/sp";
-import { createBucket } from "./bucket/createBucket";
-import { deleteBucket } from "./bucket/deleteBucket";
-import { getHeadBucket } from "./bucket/headBucket";
-import { getListBucket } from "./bucket/getListBucket";
-import { getListObjects } from "./object/listObjects";
+import {
+  createBucket,
+  deleteBucket,
+  getHeadBucket,
+  getListBucket,
+} from "./bucket";
+import { getListObjects, putObject } from "./object";
+import { transferOutCrossChain, mirrorBucket } from "./crosschain";
+import { getOneObject } from "./object/getObject";
 
 const program = new Command();
 
@@ -51,7 +55,7 @@ program
   .addCommand(
     new Command("update")
       .description(
-        "Update bucket visibility, charged quota, or payment address"
+        "(not implemented) Update bucket visibility, charged quota, or payment address"
       )
       .option("--visibility [visibility]", "Bucket visibility")
       .option("--chargedQuota [chargedQuota]", "Bucket charged quota")
@@ -123,12 +127,50 @@ program
         console.log(`List command called: Name: ${options.name}`);
         getListObjects(options.name);
       })
+  )
+
+  .addCommand(
+    new Command("put")
+      .description(
+        ` Send createObject txn to chain and upload the payload of object to the storage provider.
+      The command need to pass the file path inorder to compute hash roots on client
+      
+      Examples:
+      # create object and upload file to storage provider, the corresponding object is gnfd-object
+      $ gnfd-cmd object put file.txt --bucketName gnfd-bucket --objectName gnfd-object`
+      )
+      .requiredOption("--filePath <filePath>", "File path")
+      .requiredOption("--bucketName <name>", "Bucket name")
+      .requiredOption("--objectName <objectName>", "Object name")
+      .action((options) => {
+        console.log(`Put command called: Name: ${options.name}`);
+        // Add your code here
+        putObject(options.filePath, options.name, options.objectName);
+      })
+  )
+
+  .addCommand(
+    new Command("get")
+      .description(
+        ` Send getObject txn to chain and download the payload of object from the storage provider.
+      The command need to pass the file path inorder to compute hash roots on client
+
+      Examples:
+      # get object and download file from storage provider, the corresponding object is gnfd-object
+      $ gnfd-cmd object get file.txt --bucketName gnfd-bucket --objectName gnfd-object`
+      )
+      .requiredOption("--bucketName <name>", "Bucket name")
+      .requiredOption("--objectName <objectName>", "Object name")
+      .action((options) => {
+        console.log(`Get command called: Name: ${options.bucketName}`);
+        getOneObject(options.bucketName, options.objectName);
+      })
   );
 
 program
   .command("group")
   .description(
-    "Support the group operation functions, including create/update/delete/head/head-member"
+    "(not implemented) Support the group operation functions, including create/update/delete/head/head-member"
   )
   .action(() => {
     console.log("Group command called");
@@ -140,10 +182,55 @@ program
   .description(
     "Support the cross-chain functions, including transfer and mirror"
   )
-  .action(() => {
-    console.log("Crosschain command called");
-    // Add your code here
-  });
+  .addCommand(
+    new Command("transfer")
+      .description(
+        ` Create a cross chain transfer from Greenfield to a BSC account
+   
+      Examples:
+      # Create a crosschain transfer
+      $ gnfd-cmd crosschain transfer-out --toAddress 0x.. --amount 12345`
+      )
+      .requiredOption("--toAddress <address>", "Recipient address")
+      .requiredOption("--amount <amount>", "Amount to transfer")
+      .action((options) => {
+        console.log(
+          `Transfer command called: To: ${options.toAddress} Amount: ${options.amount}`
+        );
+        transferOutCrossChain(options.toAddress, options.amount);
+      })
+  )
+
+  .addCommand(
+    new Command("mirror")
+      .description(
+        `Mirror resource to BSC
+   
+        Examples:
+        # Mirror a bucket
+        $ gnfd-cmd crosschain mirror --resource bucket --id 1
+     
+     OPTIONS:
+        --id value        resource id
+        --resource value  resource type(group, bucket, object)
+      
+      `
+      )
+      .requiredOption("--resource <resource>", "Resource type")
+      .requiredOption("--id <id>", "Resource id")
+      .action((options) => {
+        if (options.resource == "bucket") {
+          console.log(
+            `Mirror command called: Resource: ${options.resource} Id: ${options.id}`
+          );
+          mirrorBucket(options.id);
+        } else {
+          console.log(
+            `Mirror command not implemented for resource: ${options.resource}`
+          );
+        }
+      })
+  );
 
 program
   .command("bank")
@@ -172,28 +259,20 @@ program
 
 program
   .command("policy")
-  .description("Support object policy and bucket policy operation functions")
+  .description(
+    "(not implemented) Support object policy and bucket policy operation functions"
+  )
   .action(() => {
     console.log("Policy command called");
-    // Add your code here
   });
 
 program
   .command("payment")
-  .description("Support the payment operation functions")
+  .description("(not implemented) Support the payment operation functions")
   .action(() => {
     console.log("Payment command called");
     // Add your code here
   });
-
-// list storage providers
-// gnfd-cmd sp ls
-
-// // get storage provider info
-// gnfd-cmd sp head https://gnfd-testnet-sp-1.nodereal.io
-
-// // get quota and storage price of storage provider:
-// gnfd-cmd sp get-price https://gnfd-testnet-sp-1.nodereal.io
 
 program
   .command("sp")
@@ -225,7 +304,7 @@ program
   );
 
 program
-  .command("create-keystore")
+  .command("(not implemented) create-keystore")
   .description("Create a new keystore file")
   .action(() => {
     console.log("Create-keystore command called");
