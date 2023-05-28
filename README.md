@@ -27,6 +27,22 @@ After the installation process is complete, you need to build the project before
 ```bash
 npm run build
 ```
+You may see this errors after building: 
+```bash
+
+Found 10748 errors in 24 files.
+
+Errors  Files
+     1  node_modules/.pnpm/@bnb-chain+greenfield-chain-sdk@0.2.0/node_modules/@bnb-chain/greenfield-chain-sdk/dist/esm/types/common.d.ts:2
+  1062  node_modules/.pnpm/@bnb-chain+greenfield-cosmos-types@0.4.0-alpha.9/node_modules/@bnb-chain/greenfield-cosmos-types/cosmos/bank/v1beta1/query.d.ts:421
+```
+but this is a typescript error from ```@bnb-chain+greenfield-chain-sdk``` library. These errors will not affect to our cli commands. 
+
+Go to ```.env``` file and write your metamask address and primary key: 
+```bash
+ADDRESS="0x..."
+PRIVATE_KEY=""
+```
 
 
 ## Usage
@@ -42,7 +58,30 @@ npm i -g
 gnfd-cmd
 ``` 
 
-This will display a list of available commands that you can use.
+This will display a list of available commands that you can use: 
+```bash
+Usage: gnfd-cmd [options] [command]
+
+A CLI tool for Greenfield
+
+Options:
+  -V, --version                          output the version number
+  -h, --help                             display help for command
+
+Commands:
+  bucket                                 Support the bucket operation functions, including create/update/delete/head/list
+  object                                 Support the object operation functions, including put/get/update/delete/head/list and so on
+  group                                  (not implemented) Support the group operation functions, including create/update/delete/head/head-member
+  crosschain                             Support the cross-chain functions, including transfer and mirror
+  bank                                   Bank operations
+  policy                                 (not implemented) Support object policy and bucket policy operation functions
+  payment                                (not implemented) Support the payment operation functions
+  sp                                     Support the storage provider operation functions
+  (not <implemented)> <create-keystore>  Create a new keystore file
+  help [command]                         display help for command
+``` 
+
+
 
 ## Contributing
 
