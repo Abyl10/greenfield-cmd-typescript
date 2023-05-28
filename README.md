@@ -35,6 +35,12 @@ Once the project has been successfully built, you can run the command `gnfd-cmd`
 ```bash
 gnfd-cmd
 ```
+if it is not working, you can try: 
+```bash
+npm i -g 
+
+gnfd-cmd
+``` 
 
 This will display a list of available commands that you can use.
 
