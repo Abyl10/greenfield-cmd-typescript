@@ -1,6 +1,15 @@
 # Greenfield CMD TypeScript
 
-This repository contains a command-line tool developed in TypeScript for various tasks. It provides a set of commands that you can execute after following the installation steps below.
+Greenfield CMD TypeScript is a powerful command-line tool developed in TypeScript for carrying out a variety of tasks. The tool provides a versatile set of commands, enabling you to perform a range of operations.
+
+## Primary repository
+The primary repository for this project is hosted on GitHub. You can access it via the following URL:
+
+[Greenfield CMD TypeScript Repository](https://github.com/bnb-chain/greenfield-cmd)
+
+
+## Libraries Used
+This project is primarily built with TypeScript, Node.js, and npm. It also makes extensive use of the [Greenfield JS SDK](https://github.com/bnb-chain/greenfield-js-sdk), a library developed by BnB-Chain.
 
 ## Installation
 
